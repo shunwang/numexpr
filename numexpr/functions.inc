@@ -24,7 +24,7 @@ FUNC_FF(FUNC_LOG1P_FF,   "log1p_ff",    log1pf, log1pf2, vsLog1p)
 FUNC_FF(FUNC_LOG10_FF,   "log10_ff",    log10f, log10f2, vsLog10)
 FUNC_FF(FUNC_EXP_FF,     "exp_ff",      expf,   expf2,   vsExp)
 FUNC_FF(FUNC_EXPM1_FF,   "expm1_ff",    expm1f, expm1f,  vsExpm1)
-FUNC_FF(FUNC_ABS_FF,     "absolute_ff", fabsf,  fabsf2,   vsAbs)
+FUNC_FF(FUNC_ABS_FF,     "absolute_ff", fabsf,  fabsf2,  vsAbs)
 FUNC_FF(FUNC_FF_LAST,    NULL,          NULL,   NULL,    NULL)
 #ifdef ELIDE_FUNC_FF
 #undef ELIDE_FUNC_FF
