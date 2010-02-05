@@ -1,482 +1,2416 @@
+/* GENERATED FILE. DO NOT EDIT (UNLESS YOU ENJOY LOSING YOUR CHANGES).
+
+Created by genvm.py on Thu Feb  4 22:57:22 2010.
+*/
+
+static inline int
+VM_ENGINE(unsigned int start, unsigned int blen,
+          struct vm_params params, int *pc_error)
 {
-#define VEC_LOOP(expr) for(j = 0; j < VECTOR_SIZE; j++) {       \
-        expr;                                       \
-    }
-#define VEC_ARG1(expr)                          \
-    BOUNDS_CHECK(store_in);                     \
-    BOUNDS_CHECK(arg1);                         \
-    {                                           \
-        char *dest = params.mem[store_in];      \
-        char *x1 = params.mem[arg1];            \
-        intp ss1 = params.memsizes[arg1];       \
-        intp sb1 = params.memsteps[arg1];       \
-        /* nowarns is defined and used so as to \
-        avoid compiler warnings about unused    \
-        variables */                            \
-        intp nowarns = ss1+sb1+*x1;             \
-        nowarns += 1;                           \
-        VEC_LOOP(expr);                         \
-    } break
-#define VEC_ARG2(expr)                          \
-    BOUNDS_CHECK(store_in);                     \
-    BOUNDS_CHECK(arg1);                         \
-    BOUNDS_CHECK(arg2);                         \
-    {                                           \
-        char *dest = params.mem[store_in];      \
-        char *x1 = params.mem[arg1];            \
-        intp ss1 = params.memsizes[arg1];       \
-        intp sb1 = params.memsteps[arg1];       \
-        /* nowarns is defined and used so as to \
-        avoid compiler warnings about unused    \
-        variables */                            \
-        intp nowarns = ss1+sb1+*x1;             \
-        char *x2 = params.mem[arg2];            \
-        intp ss2 = params.memsizes[arg2];       \
-        intp sb2 = params.memsteps[arg2];       \
-        nowarns += ss2+sb2+*x2;                 \
-        VEC_LOOP(expr);                         \
-    } break
+#ifdef USE_COMPUTED_GOTO
+    static void *opcode_targets[256] = {
+        [0] = &&lbl_NOOP,
+        [1] = &&lbl_COPY_BB,
+        [2] = &&lbl_INVERT_BB,
+        [3] = &&lbl_AND_BBB,
+        [4] = &&lbl_OR_BBB,
+        [5] = &&lbl_EQ_BBB,
+        [6] = &&lbl_NE_BBB,
+        [7] = &&lbl_GT_BII,
+        [8] = &&lbl_GE_BII,
+        [9] = &&lbl_EQ_BII,
+        [10] = &&lbl_NE_BII,
+        [11] = &&lbl_GT_BLL,
+        [12] = &&lbl_GE_BLL,
+        [13] = &&lbl_EQ_BLL,
+        [14] = &&lbl_NE_BLL,
+        [15] = &&lbl_GT_BFF,
+        [16] = &&lbl_GE_BFF,
+        [17] = &&lbl_EQ_BFF,
+        [18] = &&lbl_NE_BFF,
+        [19] = &&lbl_GT_BDD,
+        [20] = &&lbl_GE_BDD,
+        [21] = &&lbl_EQ_BDD,
+        [22] = &&lbl_NE_BDD,
+        [23] = &&lbl_GT_BSS,
+        [24] = &&lbl_GE_BSS,
+        [25] = &&lbl_EQ_BSS,
+        [26] = &&lbl_NE_BSS,
+        [27] = &&lbl_COPY_II,
+        [28] = &&lbl_ONES_LIKE_I,
+        [29] = &&lbl_NEG_II,
+        [30] = &&lbl_ADD_III,
+        [31] = &&lbl_SUB_III,
+        [32] = &&lbl_MUL_III,
+        [33] = &&lbl_DIV_III,
+        [34] = &&lbl_POW_III,
+        [35] = &&lbl_MOD_III,
+        [36] = &&lbl_WHERE_IBII,
+        [37] = &&lbl_CAST_LI,
+        [38] = &&lbl_COPY_LL,
+        [39] = &&lbl_ONES_LIKE_L,
+        [40] = &&lbl_NEG_LL,
+        [41] = &&lbl_ADD_LLL,
+        [42] = &&lbl_SUB_LLL,
+        [43] = &&lbl_MUL_LLL,
+        [44] = &&lbl_DIV_LLL,
+        [45] = &&lbl_POW_LLL,
+        [46] = &&lbl_MOD_LLL,
+        [47] = &&lbl_WHERE_LBLL,
+        [48] = &&lbl_CAST_FI,
+        [49] = &&lbl_CAST_FL,
+        [50] = &&lbl_COPY_FF,
+        [51] = &&lbl_ONES_LIKE_F,
+        [52] = &&lbl_NEG_FF,
+        [53] = &&lbl_ADD_FFF,
+        [54] = &&lbl_SUB_FFF,
+        [55] = &&lbl_MUL_FFF,
+        [56] = &&lbl_DIV_FFF,
+        [57] = &&lbl_POW_FFF,
+        [58] = &&lbl_MOD_FFF,
+        [59] = &&lbl_SQRT_FF,
+        [60] = &&lbl_WHERE_FBFF,
+        [61] = &&lbl_FUNC_FFN,
+        [62] = &&lbl_FUNC_FFFN,
+        [63] = &&lbl_CAST_DI,
+        [64] = &&lbl_CAST_DL,
+        [65] = &&lbl_CAST_DF,
+        [66] = &&lbl_COPY_DD,
+        [67] = &&lbl_ONES_LIKE_D,
+        [68] = &&lbl_NEG_DD,
+        [69] = &&lbl_ADD_DDD,
+        [70] = &&lbl_SUB_DDD,
+        [71] = &&lbl_MUL_DDD,
+        [72] = &&lbl_DIV_DDD,
+        [73] = &&lbl_POW_DDD,
+        [74] = &&lbl_MOD_DDD,
+        [75] = &&lbl_SQRT_DD,
+        [76] = &&lbl_WHERE_DBDD,
+        [77] = &&lbl_FUNC_DDN,
+        [78] = &&lbl_FUNC_DDDN,
+        [79] = &&lbl_EQ_BCC,
+        [80] = &&lbl_NE_BCC,
+        [81] = &&lbl_CAST_CI,
+        [82] = &&lbl_CAST_CL,
+        [83] = &&lbl_CAST_CF,
+        [84] = &&lbl_CAST_CD,
+        [85] = &&lbl_ONES_LIKE_C,
+        [86] = &&lbl_COPY_CC,
+        [87] = &&lbl_NEG_CC,
+        [88] = &&lbl_ADD_CCC,
+        [89] = &&lbl_SUB_CCC,
+        [90] = &&lbl_MUL_CCC,
+        [91] = &&lbl_DIV_CCC,
+        [92] = &&lbl_WHERE_CBCC,
+        [93] = &&lbl_FUNC_CCN,
+        [94] = &&lbl_FUNC_CCCN,
+        [95] = &&lbl_REAL_DC,
+        [96] = &&lbl_IMAG_DC,
+        [97] = &&lbl_COMPLEX_CDD,
+        [98] = &&lbl_COPY_SS,
+        [99] = &&unknown_opcode,
+        [100] = &&unknown_opcode,
+        [101] = &&lbl_SUM_IIN,
+        [102] = &&lbl_SUM_LLN,
+        [103] = &&lbl_SUM_FFN,
+        [104] = &&lbl_SUM_DDN,
+        [105] = &&lbl_SUM_CCN,
+        [106] = &&unknown_opcode,
+        [107] = &&lbl_PROD_IIN,
+        [108] = &&lbl_PROD_LLN,
+        [109] = &&lbl_PROD_FFN,
+        [110] = &&lbl_PROD_DDN,
+        [111] = &&lbl_PROD_CCN,
+        [112] = &&unknown_opcode,
+        [113] = &&unknown_opcode,
+        [114] = &&unknown_opcode,
+        [115] = &&unknown_opcode,
+        [116] = &&unknown_opcode,
+        [117] = &&unknown_opcode,
+        [118] = &&unknown_opcode,
+        [119] = &&unknown_opcode,
+        [120] = &&unknown_opcode,
+        [121] = &&unknown_opcode,
+        [122] = &&unknown_opcode,
+        [123] = &&unknown_opcode,
+        [124] = &&unknown_opcode,
+        [125] = &&unknown_opcode,
+        [126] = &&unknown_opcode,
+        [127] = &&unknown_opcode,
+        [128] = &&unknown_opcode,
+        [129] = &&unknown_opcode,
+        [130] = &&unknown_opcode,
+        [131] = &&unknown_opcode,
+        [132] = &&unknown_opcode,
+        [133] = &&unknown_opcode,
+        [134] = &&unknown_opcode,
+        [135] = &&unknown_opcode,
+        [136] = &&unknown_opcode,
+        [137] = &&unknown_opcode,
+        [138] = &&unknown_opcode,
+        [139] = &&unknown_opcode,
+        [140] = &&unknown_opcode,
+        [141] = &&unknown_opcode,
+        [142] = &&unknown_opcode,
+        [143] = &&unknown_opcode,
+        [144] = &&unknown_opcode,
+        [145] = &&unknown_opcode,
+        [146] = &&unknown_opcode,
+        [147] = &&unknown_opcode,
+        [148] = &&unknown_opcode,
+        [149] = &&unknown_opcode,
+        [150] = &&unknown_opcode,
+        [151] = &&unknown_opcode,
+        [152] = &&unknown_opcode,
+        [153] = &&unknown_opcode,
+        [154] = &&unknown_opcode,
+        [155] = &&unknown_opcode,
+        [156] = &&unknown_opcode,
+        [157] = &&unknown_opcode,
+        [158] = &&unknown_opcode,
+        [159] = &&unknown_opcode,
+        [160] = &&unknown_opcode,
+        [161] = &&unknown_opcode,
+        [162] = &&unknown_opcode,
+        [163] = &&unknown_opcode,
+        [164] = &&unknown_opcode,
+        [165] = &&unknown_opcode,
+        [166] = &&unknown_opcode,
+        [167] = &&unknown_opcode,
+        [168] = &&unknown_opcode,
+        [169] = &&unknown_opcode,
+        [170] = &&unknown_opcode,
+        [171] = &&unknown_opcode,
+        [172] = &&unknown_opcode,
+        [173] = &&unknown_opcode,
+        [174] = &&unknown_opcode,
+        [175] = &&unknown_opcode,
+        [176] = &&unknown_opcode,
+        [177] = &&unknown_opcode,
+        [178] = &&unknown_opcode,
+        [179] = &&unknown_opcode,
+        [180] = &&unknown_opcode,
+        [181] = &&unknown_opcode,
+        [182] = &&unknown_opcode,
+        [183] = &&unknown_opcode,
+        [184] = &&unknown_opcode,
+        [185] = &&unknown_opcode,
+        [186] = &&unknown_opcode,
+        [187] = &&unknown_opcode,
+        [188] = &&unknown_opcode,
+        [189] = &&unknown_opcode,
+        [190] = &&unknown_opcode,
+        [191] = &&unknown_opcode,
+        [192] = &&unknown_opcode,
+        [193] = &&unknown_opcode,
+        [194] = &&unknown_opcode,
+        [195] = &&unknown_opcode,
+        [196] = &&unknown_opcode,
+        [197] = &&unknown_opcode,
+        [198] = &&unknown_opcode,
+        [199] = &&unknown_opcode,
+        [200] = &&unknown_opcode,
+        [201] = &&unknown_opcode,
+        [202] = &&unknown_opcode,
+        [203] = &&unknown_opcode,
+        [204] = &&unknown_opcode,
+        [205] = &&unknown_opcode,
+        [206] = &&unknown_opcode,
+        [207] = &&unknown_opcode,
+        [208] = &&unknown_opcode,
+        [209] = &&unknown_opcode,
+        [210] = &&unknown_opcode,
+        [211] = &&unknown_opcode,
+        [212] = &&unknown_opcode,
+        [213] = &&unknown_opcode,
+        [214] = &&unknown_opcode,
+        [215] = &&unknown_opcode,
+        [216] = &&unknown_opcode,
+        [217] = &&unknown_opcode,
+        [218] = &&unknown_opcode,
+        [219] = &&unknown_opcode,
+        [220] = &&unknown_opcode,
+        [221] = &&unknown_opcode,
+        [222] = &&unknown_opcode,
+        [223] = &&unknown_opcode,
+        [224] = &&unknown_opcode,
+        [225] = &&unknown_opcode,
+        [226] = &&unknown_opcode,
+        [227] = &&unknown_opcode,
+        [228] = &&unknown_opcode,
+        [229] = &&unknown_opcode,
+        [230] = &&unknown_opcode,
+        [231] = &&unknown_opcode,
+        [232] = &&unknown_opcode,
+        [233] = &&unknown_opcode,
+        [234] = &&unknown_opcode,
+        [235] = &&unknown_opcode,
+        [236] = &&unknown_opcode,
+        [237] = &&unknown_opcode,
+        [238] = &&unknown_opcode,
+        [239] = &&unknown_opcode,
+        [240] = &&unknown_opcode,
+        [241] = &&unknown_opcode,
+        [242] = &&unknown_opcode,
+        [243] = &&unknown_opcode,
+        [244] = &&unknown_opcode,
+        [245] = &&unknown_opcode,
+        [246] = &&unknown_opcode,
+        [247] = &&unknown_opcode,
+        [248] = &&unknown_opcode,
+        [249] = &&unknown_opcode,
+        [250] = &&unknown_opcode,
+        [251] = &&unknown_opcode,
+        [252] = &&unknown_opcode,
+        [253] = &&unknown_opcode,
+        [254] = &&unknown_opcode,
+        [255] = &&unknown_opcode,
+    };
+#endif
+#ifdef USE_COMPUTED_GOTO
+# define TARGET(op) lbl_##op:
+# define USES_STORE_IN unsigned int store_in = params.program[pc+1]
+# define USES_ARG1 unsigned int arg1 = params.program[pc+2]
+# define USES_ARG2 unsigned int arg2 = params.program[pc+3]
+# define USES_ARG3 unsigned int arg3 = params.program[pc+5]
+# define NEXT() pc += 4; if (pc >= params.prog_len) return 0; \
+    op = params.program[pc]; goto *opcode_targets[op];
+# define NEXT2() pc += 8; if (pc >= params.prog_len) return 0; \
+    op = params.program[pc]; goto *opcode_targets[op];
+#else
+# define TARGET(op) case OP_##op:
+# define USES_STORE_IN
+# define USES_ARG1
+# define USES_ARG2
+# define USES_ARG3 unsigned int arg3 = params.program[pc+5]
+# define NEXT() break;
+# define NEXT2() pc += 4; break;
+#endif
 
-#define VEC_ARG3(expr)                          \
-    BOUNDS_CHECK(store_in);                     \
-    BOUNDS_CHECK(arg1);                         \
-    BOUNDS_CHECK(arg2);                         \
-    BOUNDS_CHECK(arg3);                         \
-    {                                           \
-        char *dest = params.mem[store_in];      \
-        char *x1 = params.mem[arg1];            \
-        intp ss1 = params.memsizes[arg1];       \
-        intp sb1 = params.memsteps[arg1];       \
-        /* nowarns is defined and used so as to \
-        avoid compiler warnings about unused    \
-        variables */                            \
-        intp nowarns = ss1+sb1+*x1;             \
-        char *x2 = params.mem[arg2];            \
-        intp ss2 = params.memsizes[arg2];       \
-        intp sb2 = params.memsteps[arg2];       \
-        char *x3 = params.mem[arg3];            \
-        intp ss3 = params.memsizes[arg3];       \
-        intp sb3 = params.memsteps[arg3];       \
-        nowarns += ss2+sb2+*x2;                 \
-        nowarns += ss3+sb3+*x3;                 \
-        VEC_LOOP(expr);                         \
-    } break
-
-#define VEC_ARG1_VML(expr)                      \
-    BOUNDS_CHECK(store_in);                     \
-    BOUNDS_CHECK(arg1);                         \
-    {                                           \
-        char *dest = params.mem[store_in];      \
-        char *x1 = params.mem[arg1];            \
-	expr;                                   \
-    } break
-
-#define VEC_ARG2_VML(expr)                      \
-    BOUNDS_CHECK(store_in);                     \
-    BOUNDS_CHECK(arg1);                         \
-    BOUNDS_CHECK(arg2);                         \
-    {                                           \
-        char *dest = params.mem[store_in];      \
-        char *x1 = params.mem[arg1];            \
-        char *x2 = params.mem[arg2];            \
-        expr;                                   \
-    } break
-
-#define VEC_ARG3_VML(expr)                      \
-    BOUNDS_CHECK(store_in);                     \
-    BOUNDS_CHECK(arg1);                         \
-    BOUNDS_CHECK(arg2);                         \
-    BOUNDS_CHECK(arg3);                         \
-    {                                           \
-        char *dest = params.mem[store_in];      \
-        char *x1 = params.mem[arg1];            \
-        char *x2 = params.mem[arg2];            \
-        char *x3 = params.mem[arg3];            \
-        expr;                                   \
-    } break
-
-
-    unsigned int pc, j, k, r;
-    /* set up pointers to next block of inputs and outputs */
-    params.mem[0] = params.output + index * params.memsteps[0];
-    for (r = 0; r < params.n_inputs; r++) {
-        struct index_data id = params.index_data[r+1];
-        if (id.count) {
-            params.mem[1+r] = params.inputs[r];
-            for (j = 0; j < VECTOR_SIZE; j++) {
-                unsigned int flatindex = 0;
-                for (k = 0; k < id.count; k ++)
-                    flatindex += id.strides[k] * id.index[k];
-                memcpy(params.mem[1+r]+ (j*id.size), id.buffer + flatindex, id.size);
-                k = id.count - 1;
-                id.index[k] += 1;
-                if (id.index[k] >= id.shape[k])
-                    while (id.index[k] >= id.shape[k]) {
-                        id.index[k] -= id.shape[k];
-                        if (k < 1) break;
-                        id.index[k-1] += 1;
-                        k -= 1;
-                    }
-            }
-        } else {
-            params.mem[1+r] = params.inputs[r] + index * params.memsteps[1+r];
-        }
-    }
-
-    /* WARNING: From now on, only do references to params.mem[arg[123]]
-       & params.memsteps[arg[123]] inside the VEC_ARG[123] macros,
-       or you will risk accessing invalid addresses.  */
-
+#define VECTOR_SIZE blen
+    unsigned int j;
+    vm_setup_input_output_pointers(&params, start, VECTOR_SIZE);
+    unsigned int pc = 0;
+#ifdef USE_COMPUTED_GOTO
+    unsigned int op = params.program[pc];
+    goto *opcode_targets[op];
+    { {
+#else
     for (pc = 0; pc < params.prog_len; pc += 4) {
-        unsigned char op = params.program[pc];
+        unsigned int op = params.program[pc];
         unsigned int store_in = params.program[pc+1];
         unsigned int arg1 = params.program[pc+2];
         unsigned int arg2 = params.program[pc+3];
-        #define      arg3   params.program[pc+5]
-        #define store_index params.index_data[store_in]
-        #define reduce_ptr  (dest + flat_index(&store_index, j))
-        #define i_reduce    *(int *)reduce_ptr
-        #define l_reduce    *(long long *)reduce_ptr
-        #define f_reduce    *(float *)reduce_ptr
-        #define d_reduce    *(double *)reduce_ptr
-        #define cr_reduce   *(double *)ptr
-        #define ci_reduce   *((double *)ptr+1)
-        #define b_dest ((char *)dest)[j]
-        #define i_dest ((int *)dest)[j]
-        #define l_dest ((long long *)dest)[j]
-        #define f_dest ((float *)dest)[j]
-        #define d_dest ((double *)dest)[j]
-        #define cr_dest ((double *)dest)[2*j]
-        #define ci_dest ((double *)dest)[2*j+1]
-        #define s_dest ((char *)dest + j*params.memsteps[store_in])
-        #define b1    ((char   *)(x1+j*sb1))[0]
-        #define i1    ((int    *)(x1+j*sb1))[0]
-        #define l1    ((long long *)(x1+j*sb1))[0]
-        #define f1    ((float  *)(x1+j*sb1))[0]
-        #define d1    ((double *)(x1+j*sb1))[0]
-        #define c1r   ((double *)(x1+j*sb1))[0]
-        #define c1i   ((double *)(x1+j*sb1))[1]
-        #define s1    ((char   *)x1+j*sb1)
-        #define b2    ((char   *)(x2+j*sb2))[0]
-        #define i2    ((int    *)(x2+j*sb2))[0]
-        #define l2    ((long long *)(x2+j*sb2))[0]
-        #define f2    ((float  *)(x2+j*sb2))[0]
-        #define d2    ((double *)(x2+j*sb2))[0]
-        #define c2r   ((double *)(x2+j*sb2))[0]
-        #define c2i   ((double *)(x2+j*sb2))[1]
-        #define s2    ((char   *)x2+j*sb2)
-        #define b3    ((char   *)(x3+j*sb3))[0]
-        #define i3    ((int    *)(x3+j*sb3))[0]
-        #define l3    ((long long *)(x3+j*sb3))[0]
-        #define f3    ((float  *)(x3+j*sb3))[0]
-        #define d3    ((double *)(x3+j*sb3))[0]
-        #define c3r   ((double *)(x3+j*sb3))[0]
-        #define c3i   ((double *)(x3+j*sb3))[1]
-        #define s3    ((char   *)x3+j*sb3)
-	/* Some temporaries */
-        double da, db;
-        cdouble ca, cb;
-        char *ptr;
-
         switch (op) {
-
-        case OP_NOOP: break;
-
-        case OP_COPY_BB: VEC_ARG1(b_dest = b1);
-        case OP_COPY_SS: VEC_ARG1(memcpy(s_dest, s1, ss1));
-        /* The next versions of copy opcodes can cope with unaligned
-           data even on platforms that crash while accessing it
-           (like the Sparc architecture under Solaris). */
-        case OP_COPY_II: VEC_ARG1(memcpy(&i_dest, s1, sizeof(int)));
-        case OP_COPY_LL: VEC_ARG1(memcpy(&l_dest, s1, sizeof(long long)));
-        case OP_COPY_FF: VEC_ARG1(memcpy(&f_dest, s1, sizeof(float)));
-        case OP_COPY_DD: VEC_ARG1(memcpy(&d_dest, s1, sizeof(double)));
-        case OP_COPY_CC: VEC_ARG1(memcpy(&cr_dest, s1, sizeof(double)*2));
-
-        case OP_INVERT_BB: VEC_ARG1(b_dest = !b1);
-        case OP_AND_BBB: VEC_ARG2(b_dest = (b1 && b2));
-        case OP_OR_BBB: VEC_ARG2(b_dest = (b1 || b2));
-
-        case OP_EQ_BBB: VEC_ARG2(b_dest = (b1 == b2));
-        case OP_NE_BBB: VEC_ARG2(b_dest = (b1 != b2));
-
-        case OP_GT_BII: VEC_ARG2(b_dest = (i1 > i2));
-        case OP_GE_BII: VEC_ARG2(b_dest = (i1 >= i2));
-        case OP_EQ_BII: VEC_ARG2(b_dest = (i1 == i2));
-        case OP_NE_BII: VEC_ARG2(b_dest = (i1 != i2));
-
-        case OP_GT_BLL: VEC_ARG2(b_dest = (l1 > l2));
-        case OP_GE_BLL: VEC_ARG2(b_dest = (l1 >= l2));
-        case OP_EQ_BLL: VEC_ARG2(b_dest = (l1 == l2));
-        case OP_NE_BLL: VEC_ARG2(b_dest = (l1 != l2));
-
-        case OP_GT_BFF: VEC_ARG2(b_dest = (f1 > f2));
-        case OP_GE_BFF: VEC_ARG2(b_dest = (f1 >= f2));
-        case OP_EQ_BFF: VEC_ARG2(b_dest = (f1 == f2));
-        case OP_NE_BFF: VEC_ARG2(b_dest = (f1 != f2));
-
-        case OP_GT_BDD: VEC_ARG2(b_dest = (d1 > d2));
-        case OP_GE_BDD: VEC_ARG2(b_dest = (d1 >= d2));
-        case OP_EQ_BDD: VEC_ARG2(b_dest = (d1 == d2));
-        case OP_NE_BDD: VEC_ARG2(b_dest = (d1 != d2));
-
-        case OP_GT_BSS: VEC_ARG2(b_dest = (stringcmp(s1, s2, ss1, ss2) > 0));
-        case OP_GE_BSS: VEC_ARG2(b_dest = (stringcmp(s1, s2, ss1, ss2) >= 0));
-        case OP_EQ_BSS: VEC_ARG2(b_dest = (stringcmp(s1, s2, ss1, ss2) == 0));
-        case OP_NE_BSS: VEC_ARG2(b_dest = (stringcmp(s1, s2, ss1, ss2) != 0));
-
-        case OP_ONES_LIKE_II: VEC_ARG1(i_dest = 1);
-        case OP_NEG_II: VEC_ARG1(i_dest = -i1);
-
-        case OP_ADD_III: VEC_ARG2(i_dest = i1 + i2);
-        case OP_SUB_III: VEC_ARG2(i_dest = i1 - i2);
-        case OP_MUL_III: VEC_ARG2(i_dest = i1 * i2);
-        case OP_DIV_III: VEC_ARG2(i_dest = i1 / i2);
-        case OP_POW_III: VEC_ARG2(i_dest = (i2 < 0) ? (1 / i1) : (int)pow(i1, i2));
-        case OP_MOD_III: VEC_ARG2(i_dest = i1 % i2);
-
-        case OP_WHERE_IBII: VEC_ARG3(i_dest = b1 ? i2 : i3);
-
-        case OP_CAST_LI: VEC_ARG1(l_dest = (long long)(i1));
-        case OP_ONES_LIKE_LL: VEC_ARG1(l_dest = 1);
-        case OP_NEG_LL: VEC_ARG1(l_dest = -l1);
-
-        case OP_ADD_LLL: VEC_ARG2(l_dest = l1 + l2);
-        case OP_SUB_LLL: VEC_ARG2(l_dest = l1 - l2);
-        case OP_MUL_LLL: VEC_ARG2(l_dest = l1 * l2);
-        case OP_DIV_LLL: VEC_ARG2(l_dest = l1 / l2);
-        case OP_POW_LLL: VEC_ARG2(l_dest = (l2 < 0) ? (1 / l1) : (long long)pow(l1, l2));
-        case OP_MOD_LLL: VEC_ARG2(l_dest = l1 % l2);
-
-        case OP_WHERE_LBLL: VEC_ARG3(l_dest = b1 ? l2 : l3);
-
-          /* Float */
-        case OP_CAST_FI: VEC_ARG1(f_dest = (float)(i1));
-        case OP_CAST_FL: VEC_ARG1(f_dest = (float)(l1));
-        case OP_ONES_LIKE_FF: VEC_ARG1(f_dest = 1.0);
-        case OP_NEG_FF: VEC_ARG1(f_dest = -f1);
-
-        case OP_ADD_FFF: VEC_ARG2(f_dest = f1 + f2);
-        case OP_SUB_FFF: VEC_ARG2(f_dest = f1 - f2);
-        case OP_MUL_FFF: VEC_ARG2(f_dest = f1 * f2);
-        case OP_DIV_FFF:
-#ifdef USE_VML
-	    VEC_ARG2_VML(vsDiv(VECTOR_SIZE,
-                               (float*)x1, (float*)x2, (float*)dest));
-#else
-	    VEC_ARG2(f_dest = f1 / f2);
 #endif
-        case OP_POW_FFF:
-#ifdef USE_VML
-	    VEC_ARG2_VML(vsPow(VECTOR_SIZE,
-                               (float*)x1, (float*)x2, (float*)dest));
+        TARGET(NOOP) {
+            // Code
+            NEXT(); }
+        TARGET(COPY_BB) {
+            // rtype=b atypes=b
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                char a1 = *(char *)(a1_base+j*a1_step);
+                *r = a1;
+            }
+            NEXT(); }
+        TARGET(INVERT_BB) {
+            // rtype=b atypes=b
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                char a1 = *(char *)(a1_base+j*a1_step);
+                *r = !a1;
+            }
+            NEXT(); }
+        TARGET(AND_BBB) {
+            // rtype=b atypes=bb
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                char a1 = *(char *)(a1_base+j*a1_step);
+                char a2 = *(char *)(a2_base+j*a2_step);
+                *r = a1 && a2;
+            }
+            NEXT(); }
+        TARGET(OR_BBB) {
+            // rtype=b atypes=bb
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                char a1 = *(char *)(a1_base+j*a1_step);
+                char a2 = *(char *)(a2_base+j*a2_step);
+                *r = a1 || a2;
+            }
+            NEXT(); }
+        TARGET(EQ_BBB) {
+            // rtype=b atypes=bb
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                char a1 = *(char *)(a1_base+j*a1_step);
+                char a2 = *(char *)(a2_base+j*a2_step);
+                *r = a1 == a2;
+            }
+            NEXT(); }
+        TARGET(NE_BBB) {
+            // rtype=b atypes=bb
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                char a1 = *(char *)(a1_base+j*a1_step);
+                char a2 = *(char *)(a2_base+j*a2_step);
+                *r = a1 != a2;
+            }
+            NEXT(); }
+        TARGET(GT_BII) {
+            // rtype=b atypes=ii
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                int a1 = *(int *)(a1_base+j*a1_step);
+                int a2 = *(int *)(a2_base+j*a2_step);
+                *r = a1 > a2;
+            }
+            NEXT(); }
+        TARGET(GE_BII) {
+            // rtype=b atypes=ii
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                int a1 = *(int *)(a1_base+j*a1_step);
+                int a2 = *(int *)(a2_base+j*a2_step);
+                *r = a1 >= a2;
+            }
+            NEXT(); }
+        TARGET(EQ_BII) {
+            // rtype=b atypes=ii
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                int a1 = *(int *)(a1_base+j*a1_step);
+                int a2 = *(int *)(a2_base+j*a2_step);
+                *r = a1 == a2;
+            }
+            NEXT(); }
+        TARGET(NE_BII) {
+            // rtype=b atypes=ii
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                int a1 = *(int *)(a1_base+j*a1_step);
+                int a2 = *(int *)(a2_base+j*a2_step);
+                *r = a1 != a2;
+            }
+            NEXT(); }
+        TARGET(GT_BLL) {
+            // rtype=b atypes=ll
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                long long a1 = *(long long *)(a1_base+j*a1_step);
+                long long a2 = *(long long *)(a2_base+j*a2_step);
+                *r = a1 > a2;
+            }
+            NEXT(); }
+        TARGET(GE_BLL) {
+            // rtype=b atypes=ll
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                long long a1 = *(long long *)(a1_base+j*a1_step);
+                long long a2 = *(long long *)(a2_base+j*a2_step);
+                *r = a1 >= a2;
+            }
+            NEXT(); }
+        TARGET(EQ_BLL) {
+            // rtype=b atypes=ll
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                long long a1 = *(long long *)(a1_base+j*a1_step);
+                long long a2 = *(long long *)(a2_base+j*a2_step);
+                *r = a1 == a2;
+            }
+            NEXT(); }
+        TARGET(NE_BLL) {
+            // rtype=b atypes=ll
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                long long a1 = *(long long *)(a1_base+j*a1_step);
+                long long a2 = *(long long *)(a2_base+j*a2_step);
+                *r = a1 != a2;
+            }
+            NEXT(); }
+        TARGET(GT_BFF) {
+            // rtype=b atypes=ff
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                float a1 = *(float *)(a1_base+j*a1_step);
+                float a2 = *(float *)(a2_base+j*a2_step);
+                *r = a1 > a2;
+            }
+            NEXT(); }
+        TARGET(GE_BFF) {
+            // rtype=b atypes=ff
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                float a1 = *(float *)(a1_base+j*a1_step);
+                float a2 = *(float *)(a2_base+j*a2_step);
+                *r = a1 >= a2;
+            }
+            NEXT(); }
+        TARGET(EQ_BFF) {
+            // rtype=b atypes=ff
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                float a1 = *(float *)(a1_base+j*a1_step);
+                float a2 = *(float *)(a2_base+j*a2_step);
+                *r = a1 == a2;
+            }
+            NEXT(); }
+        TARGET(NE_BFF) {
+            // rtype=b atypes=ff
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                float a1 = *(float *)(a1_base+j*a1_step);
+                float a2 = *(float *)(a2_base+j*a2_step);
+                *r = a1 != a2;
+            }
+            NEXT(); }
+        TARGET(GT_BDD) {
+            // rtype=b atypes=dd
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                double a1 = *(double *)(a1_base+j*a1_step);
+                double a2 = *(double *)(a2_base+j*a2_step);
+                *r = a1 > a2;
+            }
+            NEXT(); }
+        TARGET(GE_BDD) {
+            // rtype=b atypes=dd
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                double a1 = *(double *)(a1_base+j*a1_step);
+                double a2 = *(double *)(a2_base+j*a2_step);
+                *r = a1 >= a2;
+            }
+            NEXT(); }
+        TARGET(EQ_BDD) {
+            // rtype=b atypes=dd
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                double a1 = *(double *)(a1_base+j*a1_step);
+                double a2 = *(double *)(a2_base+j*a2_step);
+                *r = a1 == a2;
+            }
+            NEXT(); }
+        TARGET(NE_BDD) {
+            // rtype=b atypes=dd
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                double a1 = *(double *)(a1_base+j*a1_step);
+                double a2 = *(double *)(a2_base+j*a2_step);
+                *r = a1 != a2;
+            }
+            NEXT(); }
+        TARGET(GT_BSS) {
+            // rtype=b atypes=ss
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            intp a1_len = params.memsizes[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            intp a2_len = params.memsizes[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                char *a1_ptr = (char *)(a1_base+j*a1_step);
+                char *a2_ptr = (char *)(a2_base+j*a2_step);
+                *r = stringcmp(a1_ptr, a2_ptr, a1_len, a2_len) > 0;
+            }
+            NEXT(); }
+        TARGET(GE_BSS) {
+            // rtype=b atypes=ss
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            intp a1_len = params.memsizes[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            intp a2_len = params.memsizes[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                char *a1_ptr = (char *)(a1_base+j*a1_step);
+                char *a2_ptr = (char *)(a2_base+j*a2_step);
+                *r = stringcmp(a1_ptr, a2_ptr, a1_len, a2_len) >= 0;
+            }
+            NEXT(); }
+        TARGET(EQ_BSS) {
+            // rtype=b atypes=ss
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            intp a1_len = params.memsizes[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            intp a2_len = params.memsizes[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                char *a1_ptr = (char *)(a1_base+j*a1_step);
+                char *a2_ptr = (char *)(a2_base+j*a2_step);
+                *r = stringcmp(a1_ptr, a2_ptr, a1_len, a2_len) == 0;
+            }
+            NEXT(); }
+        TARGET(NE_BSS) {
+            // rtype=b atypes=ss
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            intp a1_len = params.memsizes[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            intp a2_len = params.memsizes[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                char *a1_ptr = (char *)(a1_base+j*a1_step);
+                char *a2_ptr = (char *)(a2_base+j*a2_step);
+                *r = stringcmp(a1_ptr, a2_ptr, a1_len, a2_len) != 0;
+            }
+            NEXT(); }
+        TARGET(COPY_II) {
+            // rtype=i atypes=i
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            int *dest = (int *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                int *r = dest + j;
+                int *a1_ptr = (int *)(a1_base+j*a1_step);
+                memcpy(r, a1_ptr, sizeof(int));
+            }
+            NEXT(); }
+        TARGET(ONES_LIKE_I) {
+            // rtype=i atypes=
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            int *dest = (int *)(params.mem[store_in]);
+            for (j=0; j < VECTOR_SIZE; j++) {
+                int *r = dest + j;
+                *r = 1;
+            }
+            NEXT(); }
+        TARGET(NEG_II) {
+            // rtype=i atypes=i
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            int *dest = (int *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                int *r = dest + j;
+                int a1 = *(int *)(a1_base+j*a1_step);
+                *r = -a1;
+            }
+            NEXT(); }
+        TARGET(ADD_III) {
+            // rtype=i atypes=ii
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            int *dest = (int *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                int *r = dest + j;
+                int a1 = *(int *)(a1_base+j*a1_step);
+                int a2 = *(int *)(a2_base+j*a2_step);
+                *r = a1 + a2;
+            }
+            NEXT(); }
+        TARGET(SUB_III) {
+            // rtype=i atypes=ii
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            int *dest = (int *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                int *r = dest + j;
+                int a1 = *(int *)(a1_base+j*a1_step);
+                int a2 = *(int *)(a2_base+j*a2_step);
+                *r = a1 - a2;
+            }
+            NEXT(); }
+        TARGET(MUL_III) {
+            // rtype=i atypes=ii
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            int *dest = (int *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                int *r = dest + j;
+                int a1 = *(int *)(a1_base+j*a1_step);
+                int a2 = *(int *)(a2_base+j*a2_step);
+                *r = a1 * a2;
+            }
+            NEXT(); }
+        TARGET(DIV_III) {
+            // rtype=i atypes=ii
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            int *dest = (int *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                int *r = dest + j;
+                int a1 = *(int *)(a1_base+j*a1_step);
+                int a2 = *(int *)(a2_base+j*a2_step);
+                *r = a1 / a2;
+            }
+            NEXT(); }
+        TARGET(POW_III) {
+            // rtype=i atypes=ii
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            int *dest = (int *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                int *r = dest + j;
+                int a1 = *(int *)(a1_base+j*a1_step);
+                int a2 = *(int *)(a2_base+j*a2_step);
+                *r = (a2 < 0) ? (1/a1) : (int)pow(a1, a2);
+            }
+            NEXT(); }
+        TARGET(MOD_III) {
+            // rtype=i atypes=ii
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            int *dest = (int *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                int *r = dest + j;
+                int a1 = *(int *)(a1_base+j*a1_step);
+                int a2 = *(int *)(a2_base+j*a2_step);
+                *r = a1 % a2;
+            }
+            NEXT(); }
+        TARGET(WHERE_IBII) {
+            // rtype=i atypes=bii
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            int *dest = (int *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            USES_ARG3;
+            BOUNDS_CHECK(arg3);
+            char *a3_base = params.mem[arg3];
+            intp a3_step = params.memsteps[arg3];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                int *r = dest + j;
+                char a1 = *(char *)(a1_base+j*a1_step);
+                int a2 = *(int *)(a2_base+j*a2_step);
+                int a3 = *(int *)(a3_base+j*a3_step);
+                *r = a1 ? a2 : a3;
+            }
+            NEXT2(); }
+        TARGET(CAST_LI) {
+            // rtype=l atypes=i
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            long long *dest = (long long *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                long long *r = dest + j;
+                int a1 = *(int *)(a1_base+j*a1_step);
+                *r = (long long)(a1);
+            }
+            NEXT(); }
+        TARGET(COPY_LL) {
+            // rtype=l atypes=l
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            long long *dest = (long long *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                long long *r = dest + j;
+                long long *a1_ptr = (long long *)(a1_base+j*a1_step);
+                memcpy(r, a1_ptr, sizeof(long long));
+            }
+            NEXT(); }
+        TARGET(ONES_LIKE_L) {
+            // rtype=l atypes=
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            long long *dest = (long long *)(params.mem[store_in]);
+            for (j=0; j < VECTOR_SIZE; j++) {
+                long long *r = dest + j;
+                *r = 1;
+            }
+            NEXT(); }
+        TARGET(NEG_LL) {
+            // rtype=l atypes=l
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            long long *dest = (long long *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                long long *r = dest + j;
+                long long a1 = *(long long *)(a1_base+j*a1_step);
+                *r = -a1;
+            }
+            NEXT(); }
+        TARGET(ADD_LLL) {
+            // rtype=l atypes=ll
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            long long *dest = (long long *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                long long *r = dest + j;
+                long long a1 = *(long long *)(a1_base+j*a1_step);
+                long long a2 = *(long long *)(a2_base+j*a2_step);
+                *r = a1 + a2;
+            }
+            NEXT(); }
+        TARGET(SUB_LLL) {
+            // rtype=l atypes=ll
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            long long *dest = (long long *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                long long *r = dest + j;
+                long long a1 = *(long long *)(a1_base+j*a1_step);
+                long long a2 = *(long long *)(a2_base+j*a2_step);
+                *r = a1 - a2;
+            }
+            NEXT(); }
+        TARGET(MUL_LLL) {
+            // rtype=l atypes=ll
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            long long *dest = (long long *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                long long *r = dest + j;
+                long long a1 = *(long long *)(a1_base+j*a1_step);
+                long long a2 = *(long long *)(a2_base+j*a2_step);
+                *r = a1 * a2;
+            }
+            NEXT(); }
+        TARGET(DIV_LLL) {
+            // rtype=l atypes=ll
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            long long *dest = (long long *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                long long *r = dest + j;
+                long long a1 = *(long long *)(a1_base+j*a1_step);
+                long long a2 = *(long long *)(a2_base+j*a2_step);
+                *r = a1 / a2;
+            }
+            NEXT(); }
+        TARGET(POW_LLL) {
+            // rtype=l atypes=ll
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            long long *dest = (long long *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                long long *r = dest + j;
+                long long a1 = *(long long *)(a1_base+j*a1_step);
+                long long a2 = *(long long *)(a2_base+j*a2_step);
+                *r = (a2 < 0) ? (1/a1) : (long long)pow(a1, a2);
+            }
+            NEXT(); }
+        TARGET(MOD_LLL) {
+            // rtype=l atypes=ll
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            long long *dest = (long long *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                long long *r = dest + j;
+                long long a1 = *(long long *)(a1_base+j*a1_step);
+                long long a2 = *(long long *)(a2_base+j*a2_step);
+                *r = a1 % a2;
+            }
+            NEXT(); }
+        TARGET(WHERE_LBLL) {
+            // rtype=l atypes=bll
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            long long *dest = (long long *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            USES_ARG3;
+            BOUNDS_CHECK(arg3);
+            char *a3_base = params.mem[arg3];
+            intp a3_step = params.memsteps[arg3];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                long long *r = dest + j;
+                char a1 = *(char *)(a1_base+j*a1_step);
+                long long a2 = *(long long *)(a2_base+j*a2_step);
+                long long a3 = *(long long *)(a3_base+j*a3_step);
+                *r = a1 ? a2 : a3;
+            }
+            NEXT2(); }
+        TARGET(CAST_FI) {
+            // rtype=f atypes=i
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            float *dest = (float *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                float *r = dest + j;
+                int a1 = *(int *)(a1_base+j*a1_step);
+                *r = (float)(a1);
+            }
+            NEXT(); }
+        TARGET(CAST_FL) {
+            // rtype=f atypes=l
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            float *dest = (float *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                float *r = dest + j;
+                long long a1 = *(long long *)(a1_base+j*a1_step);
+                *r = (float)(a1);
+            }
+            NEXT(); }
+        TARGET(COPY_FF) {
+            // rtype=f atypes=f
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            float *dest = (float *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                float *r = dest + j;
+                float *a1_ptr = (float *)(a1_base+j*a1_step);
+                memcpy(r, a1_ptr, sizeof(float));
+            }
+            NEXT(); }
+        TARGET(ONES_LIKE_F) {
+            // rtype=f atypes=
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            float *dest = (float *)(params.mem[store_in]);
+            for (j=0; j < VECTOR_SIZE; j++) {
+                float *r = dest + j;
+                *r = 1.0;
+            }
+            NEXT(); }
+        TARGET(NEG_FF) {
+            // rtype=f atypes=f
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            float *dest = (float *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                float *r = dest + j;
+                float a1 = *(float *)(a1_base+j*a1_step);
+                *r = -a1;
+            }
+            NEXT(); }
+        TARGET(ADD_FFF) {
+            // rtype=f atypes=ff
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            float *dest = (float *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                float *r = dest + j;
+                float a1 = *(float *)(a1_base+j*a1_step);
+                float a2 = *(float *)(a2_base+j*a2_step);
+                *r = a1 + a2;
+            }
+            NEXT(); }
+        TARGET(SUB_FFF) {
+            // rtype=f atypes=ff
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            float *dest = (float *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                float *r = dest + j;
+                float a1 = *(float *)(a1_base+j*a1_step);
+                float a2 = *(float *)(a2_base+j*a2_step);
+                *r = a1 - a2;
+            }
+            NEXT(); }
+        TARGET(MUL_FFF) {
+            // rtype=f atypes=ff
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            float *dest = (float *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                float *r = dest + j;
+                float a1 = *(float *)(a1_base+j*a1_step);
+                float a2 = *(float *)(a2_base+j*a2_step);
+                *r = a1 * a2;
+            }
+            NEXT(); }
+        TARGET(DIV_FFF) {
+#if defined(USE_VML)
+            float *dest = (float *)(params.mem[store_in]);
+            float *x1 = (float *)(params.mem[arg1]);
+            float *x2 = (float *)(params.mem[arg2]);
+            vsDiv(VECTOR_SIZE, x1, x2, dest);
 #else
-	    VEC_ARG2(f_dest = powf(f1, f2));
+            // rtype=f atypes=ff
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            float *dest = (float *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                float *r = dest + j;
+                float a1 = *(float *)(a1_base+j*a1_step);
+                float a2 = *(float *)(a2_base+j*a2_step);
+                *r = a1 / a2;
+            }
 #endif
-        case OP_MOD_FFF: VEC_ARG2(f_dest = f1 - floorf(f1/f2) * f2);
-
-        case OP_SQRT_FF:
-#ifdef USE_VML
-	    VEC_ARG1_VML(vsSqrt(VECTOR_SIZE, (float*)x1, (float*)dest));
+            NEXT(); }
+        TARGET(POW_FFF) {
+#if defined(USE_VML)
+            float *dest = (float *)(params.mem[store_in]);
+            float *x1 = (float *)(params.mem[arg1]);
+            float *x2 = (float *)(params.mem[arg2]);
+            vsPow(VECTOR_SIZE, x1, x2, dest);
 #else
-	    VEC_ARG1(f_dest = sqrtf(f1));
+            // rtype=f atypes=ff
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            float *dest = (float *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                float *r = dest + j;
+                float a1 = *(float *)(a1_base+j*a1_step);
+                float a2 = *(float *)(a2_base+j*a2_step);
+                *r = powf(a1, a2);
+            }
 #endif
-
-        case OP_WHERE_FBFF: VEC_ARG3(f_dest = b1 ? f2 : f3);
-
-        case OP_FUNC_FFN:
-#ifdef USE_VML
-	    VEC_ARG1_VML(functions_ff_vml[arg2](VECTOR_SIZE,
-                                                (float*)x1, (float*)dest));
+            NEXT(); }
+        TARGET(MOD_FFF) {
+            // rtype=f atypes=ff
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            float *dest = (float *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                float *r = dest + j;
+                float a1 = *(float *)(a1_base+j*a1_step);
+                float a2 = *(float *)(a2_base+j*a2_step);
+                *r = a1 - floorf(a1/a2) * a2;
+            }
+            NEXT(); }
+        TARGET(SQRT_FF) {
+#if defined(USE_VML)
+            float *dest = (float *)(params.mem[store_in]);
+            float *x1 = (float *)(params.mem[arg1]);
+            vsSqrt(VECTOR_SIZE, x1, dest);
 #else
-	    VEC_ARG1(f_dest = functions_ff[arg2](f1));
+            // rtype=f atypes=f
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            float *dest = (float *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                float *r = dest + j;
+                float a1 = *(float *)(a1_base+j*a1_step);
+                *r = sqrtf(a1);
+            }
 #endif
-        case OP_FUNC_FFFN:
-#ifdef USE_VML
-	    VEC_ARG2_VML(functions_fff_vml[arg3](VECTOR_SIZE,
-                                                 (float*)x1, (float*)x2,
-                                                 (float*)dest));
+            NEXT(); }
+        TARGET(WHERE_FBFF) {
+            // rtype=f atypes=bff
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            float *dest = (float *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            USES_ARG3;
+            BOUNDS_CHECK(arg3);
+            char *a3_base = params.mem[arg3];
+            intp a3_step = params.memsteps[arg3];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                float *r = dest + j;
+                char a1 = *(char *)(a1_base+j*a1_step);
+                float a2 = *(float *)(a2_base+j*a2_step);
+                float a3 = *(float *)(a3_base+j*a3_step);
+                *r = a1 ? a2 : a3;
+            }
+            NEXT2(); }
+        TARGET(FUNC_FFN) {
+#if defined(USE_VML)
+            float *dest = (float *)(params.mem[store_in]);
+            float *x1 = (float *)(params.mem[arg1]);
+            functions_ff_vml[arg2](VECTOR_SIZE, x1, x2, dest);
 #else
-	    VEC_ARG2(f_dest = functions_fff[arg3](f1, f2));
+            // rtype=f atypes=fn
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            float *dest = (float *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            for (j=0; j < VECTOR_SIZE; j++) {
+                float *r = dest + j;
+                float a1 = *(float *)(a1_base+j*a1_step);
+                *r = functions_ff[arg2](a1);
+            }
 #endif
-
-          /* Double */
-        case OP_CAST_DI: VEC_ARG1(d_dest = (double)(i1));
-        case OP_CAST_DL: VEC_ARG1(d_dest = (double)(l1));
-        case OP_CAST_DF: VEC_ARG1(d_dest = (double)(f1));
-        case OP_ONES_LIKE_DD: VEC_ARG1(d_dest = 1.0);
-        case OP_NEG_DD: VEC_ARG1(d_dest = -d1);
-
-        case OP_ADD_DDD: VEC_ARG2(d_dest = d1 + d2);
-        case OP_SUB_DDD: VEC_ARG2(d_dest = d1 - d2);
-        case OP_MUL_DDD: VEC_ARG2(d_dest = d1 * d2);
-        case OP_DIV_DDD:
-#ifdef USE_VML
-	    VEC_ARG2_VML(vdDiv(VECTOR_SIZE,
-                               (double*)x1, (double*)x2, (double*)dest));
+            NEXT(); }
+        TARGET(FUNC_FFFN) {
+#if defined(USE_VML)
+            float *dest = (float *)(params.mem[store_in]);
+            float *x1 = (float *)(params.mem[arg1]);
+            float *x2 = (float *)(params.mem[arg2]);
+            functions_fff_vml[arg3](VECTOR_SIZE, x1, x2, x3, dest);
 #else
-	    VEC_ARG2(d_dest = d1 / d2);
+            // rtype=f atypes=ffn
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            float *dest = (float *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            USES_ARG3;
+            for (j=0; j < VECTOR_SIZE; j++) {
+                float *r = dest + j;
+                float a1 = *(float *)(a1_base+j*a1_step);
+                float a2 = *(float *)(a2_base+j*a2_step);
+                *r = functions_fff[arg3](a1, a2);
+            }
 #endif
-        case OP_POW_DDD:
-#ifdef USE_VML
-	    VEC_ARG2_VML(vdPow(VECTOR_SIZE,
-                               (double*)x1, (double*)x2, (double*)dest));
+            NEXT2(); }
+        TARGET(CAST_DI) {
+            // rtype=d atypes=i
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            double *dest = (double *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = dest + j;
+                int a1 = *(int *)(a1_base+j*a1_step);
+                *r = (double)(a1);
+            }
+            NEXT(); }
+        TARGET(CAST_DL) {
+            // rtype=d atypes=l
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            double *dest = (double *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = dest + j;
+                long long a1 = *(long long *)(a1_base+j*a1_step);
+                *r = (double)(a1);
+            }
+            NEXT(); }
+        TARGET(CAST_DF) {
+            // rtype=d atypes=f
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            double *dest = (double *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = dest + j;
+                float a1 = *(float *)(a1_base+j*a1_step);
+                *r = (double)(a1);
+            }
+            NEXT(); }
+        TARGET(COPY_DD) {
+            // rtype=d atypes=d
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            double *dest = (double *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = dest + j;
+                double *a1_ptr = (double *)(a1_base+j*a1_step);
+                memcpy(r, a1_ptr, sizeof(double));
+            }
+            NEXT(); }
+        TARGET(ONES_LIKE_D) {
+            // rtype=d atypes=
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            double *dest = (double *)(params.mem[store_in]);
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = dest + j;
+                *r = 1.0;
+            }
+            NEXT(); }
+        TARGET(NEG_DD) {
+            // rtype=d atypes=d
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            double *dest = (double *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = dest + j;
+                double a1 = *(double *)(a1_base+j*a1_step);
+                *r = -a1;
+            }
+            NEXT(); }
+        TARGET(ADD_DDD) {
+            // rtype=d atypes=dd
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            double *dest = (double *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = dest + j;
+                double a1 = *(double *)(a1_base+j*a1_step);
+                double a2 = *(double *)(a2_base+j*a2_step);
+                *r = a1 + a2;
+            }
+            NEXT(); }
+        TARGET(SUB_DDD) {
+            // rtype=d atypes=dd
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            double *dest = (double *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = dest + j;
+                double a1 = *(double *)(a1_base+j*a1_step);
+                double a2 = *(double *)(a2_base+j*a2_step);
+                *r = a1 - a2;
+            }
+            NEXT(); }
+        TARGET(MUL_DDD) {
+            // rtype=d atypes=dd
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            double *dest = (double *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = dest + j;
+                double a1 = *(double *)(a1_base+j*a1_step);
+                double a2 = *(double *)(a2_base+j*a2_step);
+                *r = a1 * a2;
+            }
+            NEXT(); }
+        TARGET(DIV_DDD) {
+#if defined(USE_VML)
+            double *dest = (double *)(params.mem[store_in]);
+            double *x1 = (double *)(params.mem[arg1]);
+            double *x2 = (double *)(params.mem[arg2]);
+            vdDiv(VECTOR_SIZE, x1, x2, dest);
 #else
-	    VEC_ARG2(d_dest = pow(d1, d2));
+            // rtype=d atypes=dd
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            double *dest = (double *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = dest + j;
+                double a1 = *(double *)(a1_base+j*a1_step);
+                double a2 = *(double *)(a2_base+j*a2_step);
+                *r = a1 / a2;
+            }
 #endif
-        case OP_MOD_DDD: VEC_ARG2(d_dest = d1 - floor(d1/d2) * d2);
-
-        case OP_SQRT_DD:
-#ifdef USE_VML
-	    VEC_ARG1_VML(vdSqrt(VECTOR_SIZE, (double*)x1, (double*)dest));
+            NEXT(); }
+        TARGET(POW_DDD) {
+#if defined(USE_VML)
+            double *dest = (double *)(params.mem[store_in]);
+            double *x1 = (double *)(params.mem[arg1]);
+            double *x2 = (double *)(params.mem[arg2]);
+            vdPow(VECTOR_SIZE, x1, x2, dest);
 #else
-	    VEC_ARG1(d_dest = sqrt(d1));
+            // rtype=d atypes=dd
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            double *dest = (double *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = dest + j;
+                double a1 = *(double *)(a1_base+j*a1_step);
+                double a2 = *(double *)(a2_base+j*a2_step);
+                *r = pow(a1, a2);
+            }
 #endif
-
-        case OP_WHERE_DBDD: VEC_ARG3(d_dest = b1 ? d2 : d3);
-
-        case OP_FUNC_DDN:
-#ifdef USE_VML
-	    VEC_ARG1_VML(functions_dd_vml[arg2](VECTOR_SIZE,
-                                                (double*)x1, (double*)dest));
+            NEXT(); }
+        TARGET(MOD_DDD) {
+            // rtype=d atypes=dd
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            double *dest = (double *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = dest + j;
+                double a1 = *(double *)(a1_base+j*a1_step);
+                double a2 = *(double *)(a2_base+j*a2_step);
+                *r = a1 - floor(a1/a2) * a2;
+            }
+            NEXT(); }
+        TARGET(SQRT_DD) {
+#if defined(USE_VML)
+            double *dest = (double *)(params.mem[store_in]);
+            double *x1 = (double *)(params.mem[arg1]);
+            vdSqrt(VECTOR_SIZE, x1, dest);
 #else
-	    VEC_ARG1(d_dest = functions_dd[arg2](d1));
+            // rtype=d atypes=d
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            double *dest = (double *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = dest + j;
+                double a1 = *(double *)(a1_base+j*a1_step);
+                *r = sqrt(a1);
+            }
 #endif
-        case OP_FUNC_DDDN:
-#ifdef USE_VML
-	    VEC_ARG2_VML(functions_ddd_vml[arg3](VECTOR_SIZE,
-                                                 (double*)x1, (double*)x2,
-                                                 (double*)dest));
+            NEXT(); }
+        TARGET(WHERE_DBDD) {
+            // rtype=d atypes=bdd
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            double *dest = (double *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            USES_ARG3;
+            BOUNDS_CHECK(arg3);
+            char *a3_base = params.mem[arg3];
+            intp a3_step = params.memsteps[arg3];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = dest + j;
+                char a1 = *(char *)(a1_base+j*a1_step);
+                double a2 = *(double *)(a2_base+j*a2_step);
+                double a3 = *(double *)(a3_base+j*a3_step);
+                *r = a1 ? a2 : a3;
+            }
+            NEXT2(); }
+        TARGET(FUNC_DDN) {
+#if defined(USE_VML)
+            double *dest = (double *)(params.mem[store_in]);
+            double *x1 = (double *)(params.mem[arg1]);
+            functions_dd_vml[arg2](VECTOR_SIZE, x1, x2, dest);
 #else
-	    VEC_ARG2(d_dest = functions_ddd[arg3](d1, d2));
+            // rtype=d atypes=dn
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            double *dest = (double *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = dest + j;
+                double a1 = *(double *)(a1_base+j*a1_step);
+                *r = functions_dd[arg2](a1);
+            }
 #endif
-
-            /* Complex */
-        case OP_CAST_CI: VEC_ARG1(cr_dest = (double)(i1);
-                                  ci_dest = 0);
-        case OP_CAST_CL: VEC_ARG1(cr_dest = (double)(l1);
-                                  ci_dest = 0);
-        case OP_CAST_CF: VEC_ARG1(cr_dest = f1;
-                                  ci_dest = 0);
-        case OP_CAST_CD: VEC_ARG1(cr_dest = d1;
-                                  ci_dest = 0);
-        case OP_ONES_LIKE_CC: VEC_ARG1(cr_dest = 1;
-                                  ci_dest = 0);
-        case OP_NEG_CC: VEC_ARG1(cr_dest = -c1r;
-                                 ci_dest = -c1i);
-
-        case OP_ADD_CCC: VEC_ARG2(cr_dest = c1r + c2r;
-                                  ci_dest = c1i + c2i);
-        case OP_SUB_CCC: VEC_ARG2(cr_dest = c1r - c2r;
-                                  ci_dest = c1i - c2i);
-        case OP_MUL_CCC: VEC_ARG2(da = c1r*c2r - c1i*c2i;
-				  ci_dest = c1r*c2i + c1i*c2r;
-				  cr_dest = da);
-        case OP_DIV_CCC:
-#ifdef USE_VMLXXX /* VML complex division is slower */
-	    VEC_ARG2_VML(vzDiv(VECTOR_SIZE, (const MKL_Complex16*)x1,
-                               (const MKL_Complex16*)x2, (MKL_Complex16*)dest));
+            NEXT(); }
+        TARGET(FUNC_DDDN) {
+#if defined(USE_VML)
+            double *dest = (double *)(params.mem[store_in]);
+            double *x1 = (double *)(params.mem[arg1]);
+            double *x2 = (double *)(params.mem[arg2]);
+            functions_ddd_vml[arg3](VECTOR_SIZE, x1, x2, x3, dest);
 #else
-	    VEC_ARG2(da = c2r*c2r + c2i*c2i;
-		     db = (c1r*c2r + c1i*c2i) / da;
-		     ci_dest = (c1i*c2r - c1r*c2i) / da;
-		     cr_dest = db);
+            // rtype=d atypes=ddn
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            double *dest = (double *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            USES_ARG3;
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = dest + j;
+                double a1 = *(double *)(a1_base+j*a1_step);
+                double a2 = *(double *)(a2_base+j*a2_step);
+                *r = functions_ddd[arg3](a1, a2);
+            }
 #endif
-        case OP_EQ_BCC: VEC_ARG2(b_dest = (c1r == c2r && c1i == c2i));
-        case OP_NE_BCC: VEC_ARG2(b_dest = (c1r != c2r || c1i != c2i));
-
-        case OP_WHERE_CBCC: VEC_ARG3(cr_dest = b1 ? c2r : c3r;
-                                     ci_dest = b1 ? c2i : c3i);
-        case OP_FUNC_CCN:
-#ifdef USE_VML
-	    VEC_ARG1_VML(functions_cc_vml[arg2](VECTOR_SIZE,
-                                                (const MKL_Complex16*)x1,
-                                                (MKL_Complex16*)dest));
+            NEXT2(); }
+        TARGET(EQ_BCC) {
+            // rtype=b atypes=cc
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                cdouble a1 = *(cdouble *)(a1_base+j*a1_step);
+                double a1r = a1.real;
+                double a1i = a1.imag;
+                cdouble a2 = *(cdouble *)(a2_base+j*a2_step);
+                double a2r = a2.real;
+                double a2i = a2.imag;
+                *r = a1r == a2r && a1i == a2i;
+            }
+            NEXT(); }
+        TARGET(NE_BCC) {
+            // rtype=b atypes=cc
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest + j;
+                cdouble a1 = *(cdouble *)(a1_base+j*a1_step);
+                double a1r = a1.real;
+                double a1i = a1.imag;
+                cdouble a2 = *(cdouble *)(a2_base+j*a2_step);
+                double a2r = a2.real;
+                double a2i = a2.imag;
+                *r = a1r != a2r || a1i != a2i;
+            }
+            NEXT(); }
+        TARGET(CAST_CI) {
+            // rtype=c atypes=i
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            cdouble *dest = (cdouble *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                cdouble *r = dest + j;
+                int a1 = *(int *)(a1_base+j*a1_step);
+                r->real = (double)a1;
+                r->imag = 0;
+            }
+            NEXT(); }
+        TARGET(CAST_CL) {
+            // rtype=c atypes=l
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            cdouble *dest = (cdouble *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                cdouble *r = dest + j;
+                long long a1 = *(long long *)(a1_base+j*a1_step);
+                r->real = (double)a1;
+                r->imag = 0;
+            }
+            NEXT(); }
+        TARGET(CAST_CF) {
+            // rtype=c atypes=f
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            cdouble *dest = (cdouble *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                cdouble *r = dest + j;
+                float a1 = *(float *)(a1_base+j*a1_step);
+                r->real = (double)a1;
+                r->imag = 0;
+            }
+            NEXT(); }
+        TARGET(CAST_CD) {
+            // rtype=c atypes=d
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            cdouble *dest = (cdouble *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                cdouble *r = dest + j;
+                double a1 = *(double *)(a1_base+j*a1_step);
+                r->real = (double)a1;
+                r->imag = 0;
+            }
+            NEXT(); }
+        TARGET(ONES_LIKE_C) {
+            // rtype=c atypes=
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            cdouble *dest = (cdouble *)(params.mem[store_in]);
+            for (j=0; j < VECTOR_SIZE; j++) {
+                cdouble *r = dest + j;
+                r->real = 1;
+                r->imag = 0;
+            }
+            NEXT(); }
+        TARGET(COPY_CC) {
+            // rtype=c atypes=c
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            cdouble *dest = (cdouble *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                cdouble *r = dest + j;
+                cdouble *a1_ptr = (cdouble *)(a1_base+j*a1_step);
+                memcpy(r, a1_ptr, sizeof(cdouble));
+            }
+            NEXT(); }
+        TARGET(NEG_CC) {
+            // rtype=c atypes=c
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            cdouble *dest = (cdouble *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                cdouble *r = dest + j;
+                cdouble a1 = *(cdouble *)(a1_base+j*a1_step);
+                double a1r = a1.real;
+                double a1i = a1.imag;
+                r->real = -a1r;
+                r->imag = -a1i;
+            }
+            NEXT(); }
+        TARGET(ADD_CCC) {
+            // rtype=c atypes=cc
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            cdouble *dest = (cdouble *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                cdouble *r = dest + j;
+                cdouble a1 = *(cdouble *)(a1_base+j*a1_step);
+                double a1r = a1.real;
+                double a1i = a1.imag;
+                cdouble a2 = *(cdouble *)(a2_base+j*a2_step);
+                double a2r = a2.real;
+                double a2i = a2.imag;
+                r->real = a1r+a2r;
+                r->imag = a1i+a2i;
+            }
+            NEXT(); }
+        TARGET(SUB_CCC) {
+            // rtype=c atypes=cc
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            cdouble *dest = (cdouble *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                cdouble *r = dest + j;
+                cdouble a1 = *(cdouble *)(a1_base+j*a1_step);
+                double a1r = a1.real;
+                double a1i = a1.imag;
+                cdouble a2 = *(cdouble *)(a2_base+j*a2_step);
+                double a2r = a2.real;
+                double a2i = a2.imag;
+                r->real = a1r-a2r;
+                r->imag = a1i-a2i;
+            }
+            NEXT(); }
+        TARGET(MUL_CCC) {
+            // rtype=c atypes=cc
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            cdouble *dest = (cdouble *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                cdouble *r = dest + j;
+                cdouble a1 = *(cdouble *)(a1_base+j*a1_step);
+                double a1r = a1.real;
+                double a1i = a1.imag;
+                cdouble a2 = *(cdouble *)(a2_base+j*a2_step);
+                double a2r = a2.real;
+                double a2i = a2.imag;
+                r->real = a1r*a2r - a1i*a2i;
+                r->imag = a1r*a2i + a1i*a2r;
+            }
+            NEXT(); }
+        TARGET(DIV_CCC) {
+            // rtype=c atypes=cc
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            cdouble *dest = (cdouble *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                cdouble *r = dest + j;
+                cdouble a1 = *(cdouble *)(a1_base+j*a1_step);
+                double a1r = a1.real;
+                double a1i = a1.imag;
+                cdouble a2 = *(cdouble *)(a2_base+j*a2_step);
+                double a2r = a2.real;
+                double a2i = a2.imag;
+                double da = a2r*a2r + a2i*a2i;
+                r->real = (a1r*a2r + a1i*a2i) / da;
+                r->imag = (a1i*a2r - a1r*a2i) / da;
+            }
+            NEXT(); }
+        TARGET(WHERE_CBCC) {
+            // rtype=c atypes=bcc
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            cdouble *dest = (cdouble *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            USES_ARG3;
+            BOUNDS_CHECK(arg3);
+            char *a3_base = params.mem[arg3];
+            intp a3_step = params.memsteps[arg3];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                cdouble *r = dest + j;
+                char a1 = *(char *)(a1_base+j*a1_step);
+                cdouble a2 = *(cdouble *)(a2_base+j*a2_step);
+                double a2r = a2.real;
+                double a2i = a2.imag;
+                cdouble a3 = *(cdouble *)(a3_base+j*a3_step);
+                double a3r = a3.real;
+                double a3i = a3.imag;
+                r->real = a1 ? a2r : a3r;
+                r->imag = a1 ? a2i : a3i;
+            }
+            NEXT2(); }
+        TARGET(FUNC_CCN) {
+#if defined(USE_VML)
+            MKL_Complex16 *dest = (MKL_Complex16 *)(params.mem[store_in]);
+            MKL_Complex16 *x1 = (MKL_Complex16 *)(params.mem[arg1]);
+            functions_cc_vml[arg2](VECTOR_SIZE, x1, x2, dest);
 #else
-	    VEC_ARG1(ca.real = c1r;
-		     ca.imag = c1i;
-		     functions_cc[arg2](&ca, &ca);
-		     cr_dest = ca.real;
-		     ci_dest = ca.imag);
+            // rtype=c atypes=cn
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            cdouble *dest = (cdouble *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            for (j=0; j < VECTOR_SIZE; j++) {
+                cdouble *r = dest + j;
+                cdouble a1 = *(cdouble *)(a1_base+j*a1_step);
+                cdouble ca = a1;
+                functions_cc[arg2](&ca, &ca);
+                r->real = ca.real;
+                r->imag = ca.imag;
+            }
 #endif
-        case OP_FUNC_CCCN: VEC_ARG2(ca.real = c1r;
-                                    ca.imag = c1i;
-                                    cb.real = c2r;
-                                    cb.imag = c2i;
-                                    functions_ccc[arg3](&ca, &cb, &ca);
-                                    cr_dest = ca.real;
-                                    ci_dest = ca.imag);
-
-        case OP_REAL_DC: VEC_ARG1(d_dest = c1r);
-        case OP_IMAG_DC: VEC_ARG1(d_dest = c1i);
-        case OP_COMPLEX_CDD: VEC_ARG2(cr_dest = d1;
-                                      ci_dest = d2);
-
-        case OP_SUM_IIN: VEC_ARG1(i_reduce += i1);
-        case OP_SUM_LLN: VEC_ARG1(l_reduce += l1);
-        case OP_SUM_FFN: VEC_ARG1(f_reduce += f1);
-        case OP_SUM_DDN: VEC_ARG1(d_reduce += d1);
-        case OP_SUM_CCN: VEC_ARG1(ptr = reduce_ptr;
-                                  cr_reduce += c1r;
-                                  ci_reduce += c1i);
-
-        case OP_PROD_IIN: VEC_ARG1(i_reduce *= i1);
-        case OP_PROD_LLN: VEC_ARG1(l_reduce *= l1);
-        case OP_PROD_FFN: VEC_ARG1(f_reduce *= f1);
-        case OP_PROD_DDN: VEC_ARG1(d_reduce *= d1);
-        case OP_PROD_CCN: VEC_ARG1(ptr = reduce_ptr;
-                                   da = cr_reduce*c1r - ci_reduce*c1i;
-                                   ci_reduce = cr_reduce*c1i + ci_reduce*c1r;
-                                   cr_reduce = da);
-
+            NEXT(); }
+        TARGET(FUNC_CCCN) {
+            // rtype=c atypes=ccn
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            cdouble *dest = (cdouble *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            USES_ARG3;
+            for (j=0; j < VECTOR_SIZE; j++) {
+                cdouble *r = dest + j;
+                cdouble a1 = *(cdouble *)(a1_base+j*a1_step);
+                cdouble a2 = *(cdouble *)(a2_base+j*a2_step);
+                cdouble ca = a1; cdouble cb = a2;
+                functions_ccc[arg3](&ca, &cb, &ca);
+                r->real = ca.real;
+                r->imag = ca.imag;
+            }
+            NEXT2(); }
+        TARGET(REAL_DC) {
+            // rtype=d atypes=c
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            double *dest = (double *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = dest + j;
+                cdouble a1 = *(cdouble *)(a1_base+j*a1_step);
+                double a1r = a1.real;
+                *r = a1r;
+            }
+            NEXT(); }
+        TARGET(IMAG_DC) {
+            // rtype=d atypes=c
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            double *dest = (double *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = dest + j;
+                cdouble a1 = *(cdouble *)(a1_base+j*a1_step);
+                double a1i = a1.imag;
+                *r = a1i;
+            }
+            NEXT(); }
+        TARGET(COMPLEX_CDD) {
+            // rtype=c atypes=dd
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            cdouble *dest = (cdouble *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            USES_ARG2;
+            BOUNDS_CHECK(arg2);
+            char *a2_base = params.mem[arg2];
+            intp a2_step = params.memsteps[arg2];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                cdouble *r = dest + j;
+                double a1 = *(double *)(a1_base+j*a1_step);
+                double a2 = *(double *)(a2_base+j*a2_step);
+                r->real = a1;
+                r->imag = a2;
+            }
+            NEXT(); }
+        TARGET(COPY_SS) {
+            // rtype=s atypes=s
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = (char *)(params.mem[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            intp a1_len = params.memsizes[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                char *r = dest+j*params.memsteps[store_in];
+                char *a1_ptr = (char *)(a1_base+j*a1_step);
+                memcpy(r, a1_ptr, a1_len);
+            }
+            NEXT(); }
+        TARGET(SUM_IIN) {
+            // rtype=I atypes=in
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = params.mem[store_in];
+            struct index_data *store_index = &(params.index_data[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                int *r = (int *)(dest + flat_index(store_index, j));
+                int a1 = *(int *)(a1_base+j*a1_step);
+                *r += a1;
+            }
+            NEXT(); }
+        TARGET(SUM_LLN) {
+            // rtype=L atypes=ln
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = params.mem[store_in];
+            struct index_data *store_index = &(params.index_data[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                long long *r = (long long *)(dest + flat_index(store_index, j));
+                long long a1 = *(long long *)(a1_base+j*a1_step);
+                *r += a1;
+            }
+            NEXT(); }
+        TARGET(SUM_FFN) {
+            // rtype=F atypes=fn
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = params.mem[store_in];
+            struct index_data *store_index = &(params.index_data[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                float *r = (float *)(dest + flat_index(store_index, j));
+                float a1 = *(float *)(a1_base+j*a1_step);
+                *r += a1;
+            }
+            NEXT(); }
+        TARGET(SUM_DDN) {
+            // rtype=D atypes=dn
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = params.mem[store_in];
+            struct index_data *store_index = &(params.index_data[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = (double *)(dest + flat_index(store_index, j));
+                double a1 = *(double *)(a1_base+j*a1_step);
+                *r += a1;
+            }
+            NEXT(); }
+        TARGET(SUM_CCN) {
+            // rtype=C atypes=cn
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = params.mem[store_in];
+            struct index_data *store_index = &(params.index_data[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                cdouble *r = (cdouble *)(dest + flat_index(store_index, j));
+                cdouble a1 = *(cdouble *)(a1_base+j*a1_step);
+                double a1r = a1.real;
+                double a1i = a1.imag;
+                r->real = r->real + a1r;
+                r->imag = r->imag + a1i;
+            }
+            NEXT(); }
+        TARGET(PROD_IIN) {
+            // rtype=I atypes=in
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = params.mem[store_in];
+            struct index_data *store_index = &(params.index_data[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                int *r = (int *)(dest + flat_index(store_index, j));
+                int a1 = *(int *)(a1_base+j*a1_step);
+                *r *= a1;
+            }
+            NEXT(); }
+        TARGET(PROD_LLN) {
+            // rtype=L atypes=ln
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = params.mem[store_in];
+            struct index_data *store_index = &(params.index_data[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                long long *r = (long long *)(dest + flat_index(store_index, j));
+                long long a1 = *(long long *)(a1_base+j*a1_step);
+                *r *= a1;
+            }
+            NEXT(); }
+        TARGET(PROD_FFN) {
+            // rtype=F atypes=fn
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = params.mem[store_in];
+            struct index_data *store_index = &(params.index_data[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                float *r = (float *)(dest + flat_index(store_index, j));
+                float a1 = *(float *)(a1_base+j*a1_step);
+                *r *= a1;
+            }
+            NEXT(); }
+        TARGET(PROD_DDN) {
+            // rtype=D atypes=dn
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = params.mem[store_in];
+            struct index_data *store_index = &(params.index_data[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                double *r = (double *)(dest + flat_index(store_index, j));
+                double a1 = *(double *)(a1_base+j*a1_step);
+                *r *= a1;
+            }
+            NEXT(); }
+        TARGET(PROD_CCN) {
+            // rtype=C atypes=cn
+            USES_STORE_IN;
+            BOUNDS_CHECK(store_in);
+            char *dest = params.mem[store_in];
+            struct index_data *store_index = &(params.index_data[store_in]);
+            USES_ARG1;
+            BOUNDS_CHECK(arg1);
+            char *a1_base = params.mem[arg1];
+            intp a1_step = params.memsteps[arg1];
+            for (j=0; j < VECTOR_SIZE; j++) {
+                cdouble *r = (cdouble *)(dest + flat_index(store_index, j));
+                cdouble a1 = *(cdouble *)(a1_base+j*a1_step);
+                double a1r = a1.real;
+                double a1i = a1.imag;
+                double rr = r->real;
+                r->real = rr*a1r - r->imag*a1i;
+                r->imag = rr*a1i + r->imag*a1r;
+            }
+            NEXT(); }
+#ifdef USE_COMPUTED_GOTO
+        unknown_opcode:
+#else
         default:
-            *pc_error = pc;
-            return -3;
-            break;
+#endif
+            *pc_error = pc; return -3;
         }
     }
-
-#undef VEC_LOOP
-#undef VEC_ARG1
-#undef VEC_ARG2
-#undef VEC_ARG3
-
-#undef i_reduce
-#undef l_reduce
-#undef f_reduce
-#undef d_reduce
-#undef cr_reduce
-#undef ci_reduce
-#undef b_dest
-#undef i_dest
-#undef l_dest
-#undef f_dest
-#undef d_dest
-#undef cr_dest
-#undef ci_dest
-#undef s_dest
-#undef b1
-#undef i1
-#undef l1
-#undef f1
-#undef d1
-#undef c1r
-#undef c1i
-#undef s1
-#undef b2
-#undef i2
-#undef l2
-#undef f2
-#undef d2
-#undef c2r
-#undef c2i
-#undef s2
-#undef b3
-#undef i3
-#undef l3
-#undef f3
-#undef d3
-#undef c3r
-#undef c3i
-#undef s3
+    return 0;
 }
+#undef TARGET
+#undef NEXT
+#undef NEXT2
+#undef USES_STORE_IN
+#undef USES_ARG1
+#undef USES_ARG2
+#undef USES_ARG3
+#undef VECTOR_SIZE

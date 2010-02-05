@@ -915,7 +915,7 @@ flat_index(struct index_data *id, unsigned int j) {
 #define BOUNDS_CHECK(arg)
 #endif
 
-int
+static int
 stringcmp(const char *s1, const char *s2, intp maxlen1, intp maxlen2)
 {
     intp maxlen, nextpos;
@@ -935,40 +935,48 @@ stringcmp(const char *s1, const char *s2, intp maxlen1, intp maxlen2)
     return 0;
 }
 
-static inline int
-vm_engine_1(int start, int blen, struct vm_params params, int *pc_error)
+static void
+vm_setup_input_output_pointers(struct vm_params *params,
+                               unsigned int index, unsigned int len)
 {
-    unsigned int index;
-    for (index = start; index < blen; index += BLOCK_SIZE1) {
-#define VECTOR_SIZE BLOCK_SIZE1
-#include "interp_body.c"
-#undef VECTOR_SIZE
+    /* set up pointers to next block of inputs and outputs */
+    unsigned int ninput;
+    params->mem[0] = params->output + index * params->memsteps[0];
+    for (ninput = 0; ninput < params->n_inputs; ninput++) {
+        struct index_data *id = &(params->index_data[ninput+1]);
+        if (id->count) {
+            params->mem[ninput+1] = params->inputs[ninput];
+            unsigned int j;
+            for (j = 0; j < len; j++) {
+                unsigned int k, flatindex = 0;
+                for (k = 0; k < id->count; k ++) {
+                    flatindex += id->strides[k] * id->index[k];
+                }
+                memcpy(params->mem[ninput+1]+(j*id->size),
+                       id->buffer + flatindex, id->size);
+                k = id->count - 1;
+                id->index[k] += 1;
+                if (id->index[k] >= id->shape[k]) {
+                    while (id->index[k] >= id->shape[k]) {
+                        id->index[k] -= id->shape[k];
+                        if (k < 1) break;
+                        id->index[k-1] += 1;
+                        k -= 1;
+                    }
+                }
+            }
+        } else {
+            params->mem[ninput+1] = params->inputs[ninput]
+                + index * params->memsteps[ninput+1];
+        }
     }
-    return 0;
 }
 
-static inline int
-vm_engine_2(int start, int blen, struct vm_params params, int *pc_error)
-{
-    unsigned int index;
-    for (index = start; index < blen; index += BLOCK_SIZE2) {
-#define VECTOR_SIZE BLOCK_SIZE2
-#include "interp_body.c"
-#undef VECTOR_SIZE
-    }
-    return 0;
-}
+// #define USE_COMPUTED_GOTO            
 
-static inline int
-vm_engine_rest(int start, int blen, struct vm_params params, int *pc_error)
-{
-    unsigned int index = start;
-    unsigned int rest = blen - start;
-#define VECTOR_SIZE rest
+#define VM_ENGINE vm_engine_rest
 #include "interp_body.c"
-#undef VECTOR_SIZE
-    return 0;
-}
+#undef VM_ENGINE
 
 static int
 run_interpreter(NumExprObject *self, int len, char *output, char **inputs,
@@ -995,15 +1003,20 @@ run_interpreter(NumExprObject *self, int len, char *output, char **inputs,
     params.memsteps = self->memsteps;
     params.memsizes = self->memsizes;
     params.r_end = PyString_Size(self->fullsig);
+    unsigned int index;
     blen1 = len - len % BLOCK_SIZE1;
-    r = vm_engine_1(0, blen1, params, pc_error);
-    if (r < 0) return r;
-    if (len != blen1) {
-        blen2 = len - len % BLOCK_SIZE2;
-        r = vm_engine_2(blen1, blen2, params, pc_error);
+    for (index = 0; index < blen1; index += BLOCK_SIZE1) {
+        r = vm_engine_rest(index, BLOCK_SIZE1, params, pc_error);
         if (r < 0) return r;
-        if (len != blen2) {
-            r = vm_engine_rest(blen2, len, params, pc_error);
+    }
+    if (blen1 < len) {
+        blen2 = len - len % BLOCK_SIZE2;
+        for (index = blen1; index < blen2; index += BLOCK_SIZE2) {
+            r = vm_engine_rest(index, BLOCK_SIZE2, params, pc_error);
+            if (r < 0) return r;
+        }
+        if (blen2 < len) {
+            r = vm_engine_rest(blen2, len-blen2, params, pc_error);
             if (r < 0) return r;
         }
     }
@@ -1069,7 +1082,7 @@ NumExpr_run(NumExprObject *self, PyObject *args, PyObject *kwds)
 
     /* Broadcast all of the inputs to determine the output shape (this will
        require some modifications if we later allow a final reduction
-       operation). If an array has too few dimensions it's shape is padded
+       operation). If an array has too few dimensions its shape is padded
        with ones fromthe left. All array dimensions must match, or be one. */
 
     for (i = 0; i < n_dimensions; i++)
@@ -1267,8 +1280,7 @@ NumExpr_run(NumExprObject *self, PyObject *args, PyObject *kwds)
                 PyArray_FillWithScalar((PyArrayObject *)output, one);
                 Py_DECREF(one);
         }
-    }
-    else {
+    } else {
         char retsig = get_return_sig(self->program);
         if (retsig != 's') {
             self->memsteps[0] = self->memsizes[0] = size_from_char(retsig);
@@ -1496,4 +1508,11 @@ initinterpreter(void)
     if (PyModule_AddObject(m, "allaxes", PyInt_FromLong(255)) < 0) return;
     if (PyModule_AddObject(m, "maxdims", PyInt_FromLong(MAX_DIMS)) < 0) return;
 
+    if (PyModule_AddObject(m, "vm_model",
+#ifdef USE_COMPUTED_GOTO
+                           PyString_FromString("computed_goto")
+#else
+                           PyString_FromString("switch")
+#endif
+            ) < 0) return;
 }
