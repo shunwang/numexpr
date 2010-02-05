@@ -534,6 +534,7 @@ class test_threading(TestCase):
 
 def print_versions():
     """Print the versions of software that numexpr relies on."""
+    import numexpr.interpreter
     if numpy.__version__ < minimum_numpy_version:
         print "*Warning*: NumPy version is lower than recommended: %s < %s" % \
               (numpy.__version__, minimum_numpy_version)
@@ -548,6 +549,8 @@ def print_versions():
     print "VML available?     %s" % use_vml
     if use_vml:
         print "VML/MKL version:   %s" % numexpr.get_vml_version()
+    if hasattr(numexpr.interpreter, 'vm_model'):
+        print "VM model:          %s" % (numexpr.interpreter.vm_model,)
     print '-=' * 38
 
 
