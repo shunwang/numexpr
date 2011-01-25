@@ -2,6 +2,12 @@
  Release notes for Numexpr 1.4 series
 ======================================
 
+Changes from 1.4.2 to 1.4.3
+===========================
+
+- None yet.
+
+
 Changes from 1.4.1 to 1.4.2
 ===========================
 

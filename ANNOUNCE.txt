@@ -1,5 +1,5 @@
 ==========================
- Announcing Numexpr 1.4.2
+ Announcing Numexpr 1.4.3
 ==========================
 
 Numexpr is a fast numerical expression evaluator for NumPy.  With it,
@@ -9,10 +9,7 @@ and use less memory than doing the same calculation in Python.
 What's new
 ==========
 
-This is a maintenance release.  The most annying issues have been
-fixed (including the reduction mal-function introduced in 1.4 series).
-Also, several performance enhancements (specially for VML and small
-array operation) are included too.
+#XXX version-specific blurb XXX#
 
 In case you want to know more in detail what has changed in this
 version, see:
