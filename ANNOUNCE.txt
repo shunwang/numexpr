@@ -1,0 +1,39 @@
+========================
+ Announcing Numexpr 1.5
+========================
+
+Numexpr is a fast numerical expression evaluator for NumPy.  With it,
+expressions that operate on arrays (like "3*a+4*b") are accelerated
+and use less memory than doing the same calculation in Python.
+
+What's new
+==========
+
+*** Add blurb here ***
+
+In case you want to know more in detail what has changed in this
+version, see:
+
+http://code.google.com/p/numexpr/wiki/ReleaseNotes
+
+or have a look at RELEASE_NOTES.txt in the tarball.
+
+Where I can find Numexpr?
+=========================
+
+The project is hosted at Google code in:
+
+http://code.google.com/p/numexpr/
+
+You can get the packages from PyPI as well:
+
+http://pypi.python.org/pypi/numexpr
+
+Share your experience
+=====================
+
+Let us know of any bugs, suggestions, gripes, kudos, etc. you may
+have.
+
+
+Enjoy!
