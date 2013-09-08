@@ -20,9 +20,7 @@ dependencies.
 What's new
 ==========
 
-This fixes a secondary effect of "from numpy.testing import *", where
-division is imported now too, so only then necessary functions from
-there are imported now.  Thanks to Christoph Gohlke for the patch.
+** Add blurb here...
 
 In case you want to know more in detail what has changed in this
 version, see:
