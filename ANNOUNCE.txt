@@ -1,0 +1,74 @@
+==========================
+ Announcing Numexpr 2.2
+==========================
+
+Numexpr is a fast numerical expression evaluator for NumPy.  With it,
+expressions that operate on arrays (like "3*a+4*b") are accelerated
+and use less memory than doing the same calculation in Python.
+
+It wears multi-threaded capabilities, as well as support for Intel's
+VML library (included in Intel MKL), which allows an extremely fast
+evaluation of transcendental functions (sin, cos, tan, exp, log...)
+while squeezing the last drop of performance out of your multi-core
+processors.
+
+Its only dependency is NumPy (MKL is optional), so it works well as an
+easy-to-deploy, easy-to-use, computational kernel for projects that
+don't want to adopt other solutions that require more heavy
+dependencies.
+
+What's new
+==========
+
+This release is mainly meant to fix a problem with the license the
+numexpr/win32/pthread.{c,h} files emulating pthreads on Windows. After
+persmission from the original authors is granted, these files adopt
+the MIT license and can be redistributed without problems.  See issue
+#109 for details
+(https://code.google.com/p/numexpr/issues/detail?id=110).
+
+Another important improvement is the algorithm to decide the initial
+number of threads to be used.  This was necessary because by default,
+numexpr was using a number of threads equal to the detected number of
+cores, and this can be just too much for moder systems where this
+number can be too high (and counterporductive for performance in many
+cases).  Now, the 'NUMEXPR_NUM_THREADS' environment variable is
+honored, and in case this is not present, a maximum number of *8*
+threads are setup initially.  The new algorithm is fully described in
+the Users Guide now in the note of 'General routines' section:
+https://code.google.com/p/numexpr/wiki/UsersGuide#General_routines.
+Closes #110.
+
+In case you want to know more in detail what has changed in this
+version, see:
+
+http://code.google.com/p/numexpr/wiki/ReleaseNotes
+
+or have a look at RELEASE_NOTES.txt in the tarball.
+
+Where I can find Numexpr?
+=========================
+
+The project is hosted at Google code in:
+
+http://code.google.com/p/numexpr/
+
+You can get the packages from PyPI as well:
+
+http://pypi.python.org/pypi/numexpr
+
+Share your experience
+=====================
+
+Let us know of any bugs, suggestions, gripes, kudos, etc. you may
+have.
+
+
+Enjoy data!
+
+
+.. Local Variables:
+.. mode: rst
+.. coding: utf-8
+.. fill-column: 70
+.. End:
